@@ -49,7 +49,7 @@ for ( var i = 0; i < testFilePaths.length; ++i ) {
 }
 
 setTimeout( () => {
-    const errorsCount = checkTestResults( outputDirPath );
+    const errorsCount = checkTestResults();
 
     if ( !errorsCount ) {
         RemoveSync( outputDirPath );
@@ -60,18 +60,24 @@ setTimeout( () => {
 }, 100 );
 
 
-function checkTestResults( testOutputDir ) {
-    const outputFilePaths = KlawSync( testOutputDir );
+function checkTestResults() {
+    const expectedResultsFilePaths = KlawSync( expectedResultsDirPath );
 
     var errorsCount = 0;
 
-    for ( var i = outputFilePaths.length; i--; ) {
-        const { path: outputFilePath, stats } = outputFilePaths[ i ];
+    for ( var i = expectedResultsFilePaths.length; i--; ) {
+        const {
+            path: expectedResultFilePath,
+            stats,
+        } = expectedResultsFilePaths[ i ];
 
         if ( stats.isDirectory() ) continue;
 
-        const expectedResultFilePath =
-            outputFilePath.replace( outputDirPath, expectedResultsDirPath );
+        const outputFilePath =
+            expectedResultFilePath.replace(
+                expectedResultsDirPath,
+                outputDirPath
+            );
 
         console.log( '==========================' );
 
@@ -87,11 +93,16 @@ function checkTestResults( testOutputDir ) {
 }
 
 function check( filePath1, filePath2 ) {
-    const fileStr1 = FS.readFileSync( filePath1 ).toString();
-    const fileStr2 = FS.readFileSync( filePath2 ).toString();
+    try {
+        const fileStr1 = FS.readFileSync( filePath1 ).toString();
+        const fileStr2 = FS.readFileSync( filePath2 ).toString();
 
-    return (
-        fileStr1.replace( RegExps.dates, '' )
-        === fileStr2.replace( RegExps.dates, '' )
-    );
+        return (
+            fileStr1.replace( RegExps.dates, '' )
+            === fileStr2.replace( RegExps.dates, '' )
+        );
+    } catch ( e ) {
+        console.error( e );
+        return false;
+    }
 }

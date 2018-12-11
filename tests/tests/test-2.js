@@ -11,7 +11,7 @@ import { Logger, FileTransport } from '../common';
 // =============================================================================
 export function startTest( outputDirPath: string ) {
     const logger = new Logger({
-        level: 'trace',
+        level: 'info',
     });
 
     const logger2 = logger.child({

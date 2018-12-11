@@ -81,7 +81,7 @@ export
         }
 
         _canBeHandled( levelValue: number ) {
-            return this.levelValue > levelValue;
+            return this.levelValue >= levelValue;
         }
     }
 
