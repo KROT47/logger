@@ -2,7 +2,7 @@
 
 ## Example
 ```js
-import Logger from 'logger';
+import Logger from '@bubblehunt/logger';
 
 // Simple
 // --------------------------------------------------------
@@ -13,7 +13,7 @@ simpleLogger.info( 'Writes to stdout', 1, { a: [ 123 ] } );
 
 // Full
 // --------------------------------------------------------
-import FileTransport from 'logger/transports/FileTransport';
+import FileTransport from '@bubblehunt/logger/dist/transports/FileTransport';
 
 const logPath = 'out';
 
@@ -113,7 +113,7 @@ import {
     Transport,
     type TransportConfigType,
     type HandlerType,
-} from 'logger/transports/Transport';
+} from '@bubblehunt/logger/dist/transports/Transport';
 
 // Flow types
 // --------------------------------------------------------
