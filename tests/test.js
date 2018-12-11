@@ -51,7 +51,9 @@ for ( var i = 0; i < testFilePaths.length; ++i ) {
 setTimeout( () => {
     const errorsCount = checkTestResults();
 
-    if ( !errorsCount ) {
+    if ( errorsCount ) {
+        console.log( `Errors count: ${ errorsCount }` );
+    } else {
         RemoveSync( outputDirPath );
 
         console.log( 'DONE! No errors.');
@@ -60,10 +62,16 @@ setTimeout( () => {
 }, 100 );
 
 
-function checkTestResults() {
-    const expectedResultsFilePaths = KlawSync( expectedResultsDirPath );
+var errorsCount = 0;
 
-    var errorsCount = 0;
+function checkTestResults() {
+    const expectedResultsFilePaths =
+        KlawSync( expectedResultsDirPath )
+            .filter( ({ stats }) => !stats.isDirectory());
+
+    const outputResultsFilePaths =
+        KlawSync( outputDirPath )
+            .filter( ({ stats }) => !stats.isDirectory());
 
     for ( var i = expectedResultsFilePaths.length; i--; ) {
         const {
@@ -71,28 +79,41 @@ function checkTestResults() {
             stats,
         } = expectedResultsFilePaths[ i ];
 
-        if ( stats.isDirectory() ) continue;
-
         const outputFilePath =
             expectedResultFilePath.replace(
                 expectedResultsDirPath,
                 outputDirPath
             );
 
-        console.log( '==========================' );
-
-        if ( !check( outputFilePath, expectedResultFilePath ) ) {
-            console.log( 'Error:', outputFilePath );
-            errorsCount++;
-        } else {
-            console.log( 'OK!' );
-        }
+        assert(
+            filesAreEqual( outputFilePath, expectedResultFilePath ),
+            outputFilePath
+        );
     }
+
+    const expectedTestsCount = expectedResultsFilePaths.length;
+    const outputTestsCount = outputResultsFilePaths.length;
+
+    assert(
+        expectedTestsCount === outputTestsCount,
+        `Error: tests count mismatch: ${ outputTestsCount } vs ${ expectedTestsCount } expected`
+    );
 
     return errorsCount;
 }
 
-function check( filePath1, filePath2 ) {
+function assert( cond, errMsg ) {
+    console.log( '==========================' );
+
+    if ( !cond ) {
+        console.log( 'Error:', errMsg );
+        errorsCount++;
+    } else {
+        console.log( 'OK!' );
+    }
+}
+
+function filesAreEqual( filePath1, filePath2 ) {
     try {
         const fileStr1 = FS.readFileSync( filePath1 ).toString();
         const fileStr2 = FS.readFileSync( filePath2 ).toString();
