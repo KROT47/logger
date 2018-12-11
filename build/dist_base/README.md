@@ -13,7 +13,7 @@ simpleLogger.info( 'Writes to stdout', 1, { a: [ 123 ] } );
 
 // Full
 // --------------------------------------------------------
-import FileTransport from '@bubblehunt/logger/dist/transports/FileTransport';
+import FileTransport from '@bubblehunt/logger/transports/FileTransport';
 
 const logPath = 'out';
 
@@ -113,7 +113,7 @@ import {
     Transport,
     type TransportConfigType,
     type HandlerType,
-} from '@bubblehunt/logger/dist/transports/Transport';
+} from '@bubblehunt/logger/transports/Transport';
 
 // Flow types
 // --------------------------------------------------------
