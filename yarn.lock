@@ -2,14 +2,6 @@
 # yarn lockfile v1
 
 
-"@bubblehunt/logger@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@bubblehunt/logger/-/logger-1.0.0.tgz#f8178c31241981c9fce1084cae82ebf79f9f73ee"
-  integrity sha512-jdrh+xGbh2bHlm+xSQuE8IlBAwcVlDWgLL5t3qu6SFiJwTOArY1ADmEzYINHkZxBPB5+Z3+jmfPNVNT68+TL4g==
-  dependencies:
-    get-explicit-type "^1.0.2"
-    mkdirp "^0.5.1"
-
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"

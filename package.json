@@ -1,6 +1,6 @@
 {
     "name": "@bubblehunt/logger",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Helper for writing logs using transports",
     "author": "krot47 <lelekodmitry@gmail.com>",
     "repository": {
@@ -34,7 +34,6 @@
     },
     "license": "MIT",
     "dependencies": {
-        "@bubblehunt/logger": "^1.0.0",
         "get-explicit-type": "^1.0.2",
         "mkdirp": "^0.5.1"
     }
