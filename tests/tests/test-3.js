@@ -30,6 +30,8 @@ export function startTest( outputDirPath: string ) {
     a.a = a;
 
     logger2.info( a );
+
+    logger2.debug( a );
 }
 
 export default startTest;

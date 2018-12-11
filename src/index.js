@@ -128,7 +128,7 @@ export class Logger {
 
             const handleTransport = transport => {
                 // check global level
-                if ( transport.levelValue > levelValue ) return;
+                if ( this._levelValue > levelValue ) return;
 
                 // chack transport level
                 if ( !transport._levelIsOkToPrint( levelValue ) ) return;
