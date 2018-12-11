@@ -1,6 +1,6 @@
 {
     "name": "@bubblehunt/logger",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Helper for writing logs using transports",
     "author": "krot47 <lelekodmitry@gmail.com>",
     "repository": {
@@ -16,9 +16,7 @@
         "build": "$npm_execpath run clean:dist && node_modules/.bin/babel-node build",
         "test": "node_modules/.bin/babel-node tests/test",
         "update-snapshots": "node_modules/.bin/babel-node tests/update-tests-snapshots",
-        "flow": "node_modules/.bin/flow",
-        "npm-publish": "yarn build && yarn publish-only",
-        "publish-only": "./publish.sh"
+        "flow": "node_modules/.bin/flow"
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",
