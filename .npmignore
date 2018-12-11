@@ -1,0 +1,6 @@
+.git*
+.settings
+.project
+.travis.yml
+.npmignore
+publish.sh
