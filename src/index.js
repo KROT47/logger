@@ -59,8 +59,7 @@ const DefaultConfig = {
 const RegExps = {
     lineBreaks: /\n/g,
     escapedLineBreaks: /\\n/g,
-    openObjectBrackets: /\{\s+/g,
-    stringObjectTypes: /\[(Circular|Object|Array|Function)[^\]]*\]|NaN|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/g,
+    startsWithOpenBracket: /^{\s+/,
 };
 
 
@@ -309,7 +308,13 @@ export class Logger {
                 ? _.merge( {}, this._config.printConfig, printConfig )
                 : this._config.printConfig;
 
-        return Util.inspect( value, printConfig );
+        var result = Util.inspect( value, printConfig );
+
+        if ( ~result.indexOf( '\n' ) ) {
+            result = result.replace( RegExps.startsWithOpenBracket, '{\n  ' );
+        }
+
+        return result;
     }
 }
 
