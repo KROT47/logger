@@ -116,33 +116,25 @@ export class Logger {
 
             const printLogCache = {};
 
-            const printLog = printType => {
-                if ( !printLogCache[ printType ] ) {
-                    printLogCache[ printType ] =
-                        this._getLogOutput( printType, options, msgs );
-                }
-
-                return printLogCache[ printType ];
-            };
-
-            const handleTransport = transport => {
-                // check global level
-                if ( this._levelValue > levelValue ) return;
-
-                // chack transport level
-                if ( !transport._levelIsOkToPrint( levelValue ) ) return;
-
-                const outStr = printLog( transport.printType );
-
-                transport._handler( outStr, options );
-            };
-
-            handleTransport( this._stdoutTransport );
+            this._handleTransport({
+                transport: this._stdoutTransport,
+                globalLevelValue: this._stdoutLevelValue,
+                levelValue,
+                printLogCache,
+                options,
+                msgs,
+            });
 
             for ( var i = this._transports.length; i--; ) {
-                handleTransport( this._transports[ i ] );
+                this._handleTransport({
+                    transport: this._transports[ i ],
+                    globalLevelValue: this._levelValue,
+                    levelValue,
+                    printLogCache,
+                    options,
+                    msgs,
+                });
             }
-
 
         } catch ( error ) {
             this.fatal( error );
@@ -173,6 +165,59 @@ export class Logger {
 
     // Private
     // --------------------------------------------------------
+    _handleTransport({
+        levelValue,
+        globalLevelValue,
+        transport,
+        printLogCache,
+        options,
+        msgs,
+    }: {
+        levelValue: number,
+        transport: Transport<*>,
+        globalLevelValue: number,
+        printLogCache: Object,
+        options: { level: string, levelValue: number },
+        msgs: Array<any>,
+    }) {
+        // check global level
+        if ( globalLevelValue > levelValue ) return;
+
+        // chack transport level
+        if ( !transport._levelIsOkToPrint( levelValue ) ) return;
+
+        const outStr =
+                this._printLog({
+                    transport,
+                    printLogCache,
+                    options,
+                    msgs,
+                });
+
+        transport._handler( outStr, options );
+    }
+
+    _printLog({
+        transport,
+        printLogCache,
+        options,
+        msgs,
+    }: {
+        transport: Transport<*>,
+        printLogCache: Object,
+        options: Object,
+        msgs: Array<any>,
+    }) {
+        const { printType } = transport;
+
+        if ( !printLogCache[ printType ] ) {
+            printLogCache[ printType ] =
+                this._getLogOutput( printType, options, msgs );
+        }
+
+        return printLogCache[ printType ];
+    }
+
     _getLogOutput(
         printType: PrintType,
         options: OptionsType,
