@@ -56,6 +56,8 @@ export class FileTransport extends Transport<FileTransportConfigType> {
         FilesReservedForWrite[ filePath ] = true;
     }
 
+    __writeQueue: Array<string> = [];
+
     __fileWriteStream: WriteStream;
 
     __isEnded = false;
@@ -83,7 +85,9 @@ export class FileTransport extends Transport<FileTransportConfigType> {
     handler: HandlerType = ( logStr ) => {
         if ( this.__isEnded ) return;
 
-        this.__getFileWriteStream().write( logStr + '\n' );
+        this.__writeQueue.push( logStr + '\n' );
+
+        this.__tryToProcessQueue();
     };
 
     end = () => {
@@ -93,13 +97,38 @@ export class FileTransport extends Transport<FileTransportConfigType> {
 
         const { filePath, createOnFirstWrite } = this._config;
 
-        if ( this.__fileWriteStream ) this.__fileWriteStream.end();
+        if ( this.__fileWriteStream ) {
+            this.__fileWriteStream.end();
+            this.__tryToProcessQueueSync();
+        }
 
         delete FilesReservedForWrite[ filePath ];
     };
 
     // Private
     // --------------------------------------------------------
+    __queueIsInProcess = false;
+    __tryToProcessQueue() {
+        if ( this.__queueIsInProcess || !this.__writeQueue.length ) return;
+        this.__queueIsInProcess = true;
+
+        const logStr = this.__writeQueue[ 0 ];
+
+        this.__getFileWriteStream().write( logStr, () => {
+            this.__writeQueue.shift();
+            this.__queueIsInProcess = false;
+            this.__tryToProcessQueue();
+        });
+    }
+
+    __tryToProcessQueueSync() {
+        for ( var i = 0; i < this.__writeQueue.length; ++i ) {
+            const logStr = this.__writeQueue[ i ];
+
+            FS.appendFileSync( this._config.filePath, logStr );
+        }
+    }
+
     __getFileWriteStream() {
         if ( !this.__fileWriteStream ) {
             const { filePath } = this._config;
