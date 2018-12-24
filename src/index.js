@@ -28,7 +28,7 @@ export type LoggerConfigType = {
     hostname?: string,
     stdoutMsgSeparator?: ?string | false,
     stdout?: ?Transport<*> | Logger | false,
-    transports?: Array<Transport<*>>,
+    transports?: Array<Transport<any>>,
     printConfig?: {
         colors: boolean,
         depth: number,

@@ -17,11 +17,9 @@ import {
 
 // Flow types
 // --------------------------------------------------------
-type DefaultConfigType = {};
+type DefaultConfigType = {||};
 
-type StdoutTransportConfigType =
-    & TransportConfigType
-    & DefaultConfigType;
+type StdoutTransportConfigType = TransportConfigType<DefaultConfigType>;
 
 
 // =============================================================================

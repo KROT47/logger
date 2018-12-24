@@ -87,33 +87,39 @@ logger.stdout.info( 'writes only to stdout' );
 
 // Make child with new options
 // --------------------------------------------------------
-var logger2 = logger.child({
-    hostname: 'Child',
-    level: 'trace',
-});
+const logger2 =
+        logger.child({
+            hostname: 'Child-1',
+            level: 'trace',
+        });
 
 logger2.trace( 'writes to two first transports with level "trace"' );
 
 
 // Make child with new options
 // --------------------------------------------------------
-logger3 = logger2.child({
-    stdoutLevel: 'trace',
-});
+const logger3 =
+        logger2.child({
+            hostname: 'Child-2',
+            stdoutLevel: 'trace',
+        });
 
 logger3.trace( 'writes to two first transports with level "trace" and to stdout' );
 
 
 // Make child with new options
 // --------------------------------------------------------
-logger4 = logger3.child({
-    level: 'none',
-    stdoutLevel: 'none',
-});
+const logger4 =
+        logger3.child({
+            hostname: 'Child-3',
+            level: 'error',
+            stdoutLevel: 'error',
+        });
 
-logger4.error( 'no writes' );
+logger4.info( 'no writes' );
 
-logger4.major( 'writes to first transport and stdout' );
+// if "info" is ignored then "state" can be used to log smth important
+logger4.state( 'writes to first transport and stdout' );
 ```
 
 

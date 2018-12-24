@@ -7,11 +7,6 @@ import _ from 'lodash';
 
 // Flow types
 // --------------------------------------------------------
-export interface TransportInterface<ConfigType> {
-    handler: HandlerType;
-    end: EndType;
-}
-
 // json - basically to print to file
 // simple-cli - uses cli colors, so printing to file will be not pretty
 // simple - prints without colors as simple text
@@ -26,19 +21,26 @@ export type LevelType =
         | 'none'
         | 'state';
 
+export interface TransportInterface<ConfigType> {
+    handler: HandlerType;
+    end: EndType;
+}
+
 export type HandlerType =
     ( logItem: string, { level: LevelType, levelValue: number } ) => void;
 
 export type EndType = () => void;
 
-export type TransportConfigType = {
-    level?: LevelType,
+export type TransportConfigType<SpecificFieldsType> = {|
+    level: LevelType,
     handler?: HandlerType,
     printType?: PrintType,
     // if true then msg will be printed only if level is equal to transport's
     // by default it is printed when level is equal or greater
     strict?: boolean,
-};
+
+    ...SpecificFieldsType,
+|};
 
 export type OptionsType = {
     level: LevelType,

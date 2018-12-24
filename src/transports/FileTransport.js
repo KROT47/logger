@@ -21,14 +21,12 @@ import {
 
 // Flow types
 // --------------------------------------------------------
-type DefaultConfigType = {
+type DefaultConfigType = {|
     createOnFirstWrite?: boolean,
     filePath: string,
-};
+|};
 
-type FileTransportConfigType =
-    & TransportConfigType
-    & DefaultConfigType;
+type FileTransportConfigType = TransportConfigType<DefaultConfigType>;
 
 
 // =============================================================================

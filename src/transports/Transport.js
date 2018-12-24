@@ -36,23 +36,21 @@ const DefaultConfig = {
 // Transport
 // =============================================================================
 export
-    class Transport<ConfigType: TransportConfigType>
+    class Transport<ConfigType: TransportConfigType<Object>>
         implements TransportInterface<ConfigType>
     {
         levelValue: number;
-        printType: PrintType;
         _config: ConfigType;
         _handler: HandlerType;
         _end: EndType;
 
-        constructor( config?: TransportConfigType ) {
-            // $FlowFixMe
+        constructor( config?: ConfigType ) {
             this._config = { ...DefaultConfig, ...config };
 
             this.levelValue = getLevelValue( this._config.level );
-            // $FlowFixMe
-            this.printType = this._config.printType;
         }
+
+        get printType(): PrintType { return this._config.printType }
 
         // Public
         // --------------------------------------------------------
