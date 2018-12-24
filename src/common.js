@@ -17,10 +17,17 @@ export interface TransportInterface<ConfigType> {
 // simple - prints without colors as simple text
 export type PrintType = 'json' | 'simple-cli' | 'simple';
 export type LevelType =
-        'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal' | 'none';
+        | 'trace'
+        | 'debug'
+        | 'info'
+        | 'warn'
+        | 'error'
+        | 'fatal'
+        | 'none'
+        | 'major';
 
 export type HandlerType =
-    ( logItem: string, { level: string, levelValue: number } ) => void;
+    ( logItem: string, { level: LevelType, levelValue: number } ) => void;
 
 export type EndType = () => void;
 
@@ -50,6 +57,7 @@ export const Levels = [
     { name: 'error', value: 4, printValue: 'ERROR' },
     { name: 'fatal', value: 5, printValue: 'FATAL' },
     { name: 'none',  value: 6, printValue: '' },
+    { name: 'major', value: 7, printValue: 'MAJOR' },
 ];
 
 export const LevelsByName = _.keyBy( Levels, 'name' );

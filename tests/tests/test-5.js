@@ -11,17 +11,14 @@ import { Logger } from '../common';
 // =============================================================================
 export function startTest( outputDirPath: string ) {
     const logger = new Logger({
-        stdoutLevel: 'trace',
-        level: 'info',
+        stdoutLevel: 'info',
     });
 
     const logger2 = logger.child({
-        hostname: '4444',
+        hostname: '55555',
     });
 
-    logger2.info( 'Next line should be result of 1 + 1' );
-
-    logger2.trace( 1 + 1, 'OK!' );
+    logger2.stdout.info( 'This line will be printed only to stdout' );
 }
 
 export default startTest;

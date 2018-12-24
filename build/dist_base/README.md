@@ -30,6 +30,9 @@ const logger = new Logger({
     hostname: 'Main',
     // Separates each message in stdout
     stdoutMsgSeparator: '----------------------',
+    // Sets or disables stdout: Logger | Transport | false
+    // default: StdoutTransport
+    stdout: undefined,
     // Every message will be written to transport if level matches
     transports: [
         new FileTransport({
@@ -75,9 +78,11 @@ const logger = new Logger({
     },
 });
 
-logger.info( `writes to file with level: 'info' and stdout` );
+logger.info( 'writes to first transport, with level "info" and to stdout' );
 
-logger.trace( { a: 1 }, 1 ); // nothing happens
+logger.trace( { a: 1 }, 1 ); // nothing: requires level "debug" or higher
+
+logger.stdout.info( 'writes only to stdout' );
 
 
 // Make child with new options
@@ -87,7 +92,7 @@ var logger2 = logger.child({
     level: 'trace',
 });
 
-logger2.trace( `writes to two first files with level: 'trace'` );
+logger2.trace( 'writes to two first transports with level "trace"' );
 
 
 // Make child with new options
@@ -96,7 +101,19 @@ logger3 = logger2.child({
     stdoutLevel: 'trace',
 });
 
-logger3.trace( `writes to two first files with level: 'trace' and to stdout` );
+logger3.trace( 'writes to two first transports with level "trace" and to stdout' );
+
+
+// Make child with new options
+// --------------------------------------------------------
+logger4 = logger3.child({
+    level: 'none',
+    stdoutLevel: 'none',
+});
+
+logger4.error( 'no writes' );
+
+logger4.major( 'writes to first transport and stdout' );
 ```
 
 
@@ -137,8 +154,8 @@ const DefaultConfig = {
     // Messages format
     // printType?: 'json' | 'simple-cli' | 'simple',
 
-    // if true then msg will be printed only if level is equal to transport's
-    // by default it is printed when level is equal or greater
+    // if true ( default ) then msg will be printed only if level is equal to transport's
+    // if false it is printed when level is equal or greater
     // strict?: boolean,
 };
 
@@ -152,8 +169,6 @@ export class MyTransport extends Transport<MyTransportConfigType> {
         super({ ...DefaultConfig, ...config });
     }
 
-    // Public
-    // --------------------------------------------------------
     handler: HandlerType = ( logStr, options ) => {
         console.log( logStr, options );
     };
@@ -162,5 +177,4 @@ export class MyTransport extends Transport<MyTransportConfigType> {
 }
 
 export default MyTransport;
-
 ```

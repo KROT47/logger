@@ -26,7 +26,8 @@ export type LoggerConfigType = {
     level?: LevelType,
     stopOnFatal?: boolean,
     hostname?: string,
-    stdoutMsgSeparator?: ?string,
+    stdoutMsgSeparator?: ?string | false,
+    stdout?: ?Transport<*> | Logger | false,
     transports?: Array<Transport<*>>,
     printConfig?: {
         colors: boolean,
@@ -48,6 +49,7 @@ const DefaultConfig = {
     stopOnFatal: false,
     hostname: 'Main',
     stdoutMsgSeparator: '----------------------',
+    stdout: undefined,
     transports: [],
     printConfig: {
         colors: true,
@@ -71,8 +73,9 @@ export class Logger {
     _levelValue: number;
     _stdoutLevelValue: number;
     _printTypes: { [ printType: PrintType ]: any };
-    _stdoutTransport: StdoutTransport;
     _transports: Array<Transport<*>>;
+
+    stdout: Logger;
 
     constructor( config?: LoggerConfigType ) {
         this._config = _.merge( {}, DefaultConfig, config );
@@ -80,22 +83,48 @@ export class Logger {
         this._levelValue = getLevelValue( this._config.level );
         this._stdoutLevelValue = getLevelValue( this._config.stdoutLevel );
 
+        var stdoutConfig;
+
+        if ( this._config.stdout ) {
+            if ( this._config.stdout instanceof Logger ) {
+                this.stdout = this._config.stdout;
+            } else {
+                stdoutConfig = {
+                    level: this._config.stdoutLevel,
+                    stdout: this._config.stdout,
+                };
+            }
+
+        } else if ( this._config.stdout === undefined ) {
+            stdoutConfig = {
+                level: this._config.stdoutLevel,
+                stdout: false,
+                transports: [
+                    new StdoutTransport({
+                        level: this._config.stdoutLevel,
+                    })
+                ]
+            };
+        }
+        if ( stdoutConfig ) this.stdout = new Logger( stdoutConfig );
+
         this._transports =
             this._config.transports
                 .filter(
                     transport => transport._canBeHandled( this._levelValue )
                 );
-
-        this._stdoutTransport =
-            new StdoutTransport({
-                level: this._config.stdoutLevel,
-            });
     }
 
     child( childConfig: LoggerConfigType ) {
+        const stdout =
+                this.stdout
+                && this.stdout.child(
+                    _.omit( childConfig, [ 'transports', 'stdout' ] )
+                );
+
         const config =
                 _.mergeWith(
-                    {}, this._config, childConfig,
+                    {}, this._config, { stdout }, childConfig,
                     this._childCustomizer
                 );
 
@@ -105,59 +134,44 @@ export class Logger {
         if ( _.isArray( objValue ) ) return objValue.concat( srcValue );
     }
 
-    log = ( level: LevelType, ...msgs: Array<any> ) => {
-        try {
-            const levelValue = getLevelValue( level );
+    log( level: LevelType, ...msgs: Array<any> ) {
+        const levelValue = getLevelValue( level );
 
-            const options = {
+        const logParams = {
+            msgs,
+            printLogCache: {},
+            options: {
                 level,
                 levelValue,
-            };
+            },
+        };
 
-            const printLogCache = {};
+        this.stdout && this.stdout._log( logParams );
 
-            this._handleTransport({
-                transport: this._stdoutTransport,
-                globalLevelValue: this._stdoutLevelValue,
-                levelValue,
-                printLogCache,
-                options,
-                msgs,
-            });
+        this._log( logParams );
+    }
 
-            for ( var i = this._transports.length; i--; ) {
-                this._handleTransport({
-                    transport: this._transports[ i ],
-                    globalLevelValue: this._levelValue,
-                    levelValue,
-                    printLogCache,
-                    options,
-                    msgs,
-                });
-            }
+    trace( ...args: Array<any> ) { this.log( 'trace', ...args ) }
 
-        } catch ( error ) {
-            this.fatal( error );
-        }
-    };
+    debug( ...args: Array<any> ) { this.log( 'debug', ...args ) }
 
-    trace = ( ...args: Array<any> ) => this.log( 'trace', ...args );
+    info( ...args: Array<any> ) { this.log( 'info', ...args ) }
 
-    debug = ( ...args: Array<any> ) => this.log( 'debug', ...args );
+    warn( ...args: Array<any> ) { this.log( 'warn', ...args ) }
 
-    info = ( ...args: Array<any> ) => this.log( 'info', ...args );
+    error( ...args: Array<any> ) { this.log( 'error', ...args ) }
 
-    warn = ( ...args: Array<any> ) => this.log( 'warn', ...args );
-
-    error = ( ...args: Array<any> ) => this.log( 'error', ...args );
-
-    fatal = ( ...args: Array<any> ) => {
+    fatal( ...args: Array<any> ) {
         this.log( 'fatal', ...args );
 
         if ( this._config.stopOnFatal ) process.exit( 1 );
-    };
+    }
+
+    major( ...args: Array<any> ) { this.log( 'major', ...args ) }
 
     end() {
+        this.stdout && this.stdout.end();
+
         for ( var i = this._transports.length; i--; ) {
             this._transports[ i ]._end();
         }
@@ -165,21 +179,40 @@ export class Logger {
 
     // Private
     // --------------------------------------------------------
+    _log( params: {
+        msgs: Array<any>,
+        printLogCache: Object,
+        options: OptionsType,
+    }) {
+        try {
+            for ( var i = this._transports.length; i--; ) {
+                this._handleTransport({
+                    transport: this._transports[ i ],
+                    globalLevelValue: this._levelValue,
+                    ...params,
+                });
+            }
+
+        } catch ( error ) {
+            this.fatal( error );
+        }
+    }
+
     _handleTransport({
-        levelValue,
         globalLevelValue,
         transport,
         printLogCache,
         options,
         msgs,
     }: {
-        levelValue: number,
         transport: Transport<*>,
         globalLevelValue: number,
         printLogCache: Object,
-        options: { level: string, levelValue: number },
+        options: OptionsType,
         msgs: Array<any>,
     }) {
+        const { levelValue } = options;
+
         // check global level
         if ( globalLevelValue > levelValue ) return;
 

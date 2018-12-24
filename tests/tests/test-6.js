@@ -3,7 +3,7 @@
 // =============================================================================
 // Imports
 // =============================================================================
-import { Logger } from '../common';
+import { Logger, FileTransport } from '../common';
 
 
 // =============================================================================
@@ -11,17 +11,25 @@ import { Logger } from '../common';
 // =============================================================================
 export function startTest( outputDirPath: string ) {
     const logger = new Logger({
-        stdoutLevel: 'trace',
-        level: 'info',
+        level: 'none',
+        stdoutLevel: 'none',
     });
 
     const logger2 = logger.child({
-        hostname: '4444',
+        hostname: '666666',
+        transports: [
+            new FileTransport({
+                level: 'trace',
+                strict: false,
+                printType: 'simple',
+                filePath: `${ outputDirPath }/all.log`,
+            }),
+        ]
     });
 
-    logger2.info( 'Next line should be result of 1 + 1' );
+    logger2.error( 'No printing' );
 
-    logger2.trace( 1 + 1, 'OK!' );
+    logger2.major( 'Something important' );
 }
 
 export default startTest;
