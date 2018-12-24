@@ -161,13 +161,13 @@ export class Logger {
 
     error( ...args: Array<any> ) { this.log( 'error', ...args ) }
 
+    state( ...args: Array<any> ) { this.log( 'state', ...args ) }
+
     fatal( ...args: Array<any> ) {
         this.log( 'fatal', ...args );
 
         if ( this._config.stopOnFatal ) process.exit( 1 );
     }
-
-    major( ...args: Array<any> ) { this.log( 'major', ...args ) }
 
     end() {
         this.stdout && this.stdout.end();

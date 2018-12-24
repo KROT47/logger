@@ -11,8 +11,8 @@ import { Logger, FileTransport } from '../common';
 // =============================================================================
 export function startTest( outputDirPath: string ) {
     const logger = new Logger({
-        level: 'none',
-        stdoutLevel: 'none',
+        level: 'state',
+        stdoutLevel: 'state',
     });
 
     const logger2 = logger.child({
@@ -27,9 +27,19 @@ export function startTest( outputDirPath: string ) {
         ]
     });
 
-    logger2.error( 'No printing' );
+    logger2.error( 'This must not be printed' );
 
-    logger2.major( 'Something important' );
+    logger2.state( 'Something important' );
+
+
+    const logger3 = logger2.child({
+        hostname: '666666-2',
+        level: 'none',
+        stdoutLevel: 'none',
+        stopOnFatal: false,
+    });
+
+    logger3.fatal( 'This must not be printed' );
 }
 
 export default startTest;

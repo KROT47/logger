@@ -24,7 +24,7 @@ export type LevelType =
         | 'error'
         | 'fatal'
         | 'none'
-        | 'major';
+        | 'state';
 
 export type HandlerType =
     ( logItem: string, { level: LevelType, levelValue: number } ) => void;
@@ -55,9 +55,9 @@ export const Levels = [
     { name: 'info',  value: 2, printValue: 'INFO' },
     { name: 'warn',  value: 3, printValue: 'WARN' },
     { name: 'error', value: 4, printValue: 'ERROR' },
-    { name: 'fatal', value: 5, printValue: 'FATAL' },
-    { name: 'none',  value: 6, printValue: '' },
-    { name: 'major', value: 7, printValue: 'MAJOR' },
+    { name: 'state', value: 5, printValue: 'STATE' },
+    { name: 'fatal', value: 6, printValue: 'FATAL' },
+    { name: 'none',  value: 7, printValue: '' },
 ];
 
 export const LevelsByName = _.keyBy( Levels, 'name' );
