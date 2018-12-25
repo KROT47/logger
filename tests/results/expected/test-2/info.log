@@ -1,31 +1,31 @@
-[2018-12-24T15:13:53.842Z] INFO on 222 | { x: 1, a: [Circular] }
-[2018-12-24T15:13:53.842Z] INFO on 222 | { a: { a: { a: { a: { a: { a: [Object] } } } } } }
-[2018-12-24T15:13:53.843Z] INFO on 222 | { a: { a: { a: { a: { a: { a: [Array] } } } } } }
-[2018-12-24T15:13:53.843Z] INFO on 222 | { a: { a: { a: { a: { a: { a: [Function: a] } } } } } }
-[2018-12-24T15:13:53.843Z] INFO on 222 | { a: { a: { a: { a: { a: { a: NaN } } } } } }
-[2018-12-24T15:13:53.843Z] INFO on 222 | { a: { a: { a: { a: { a: { a: undefined } } } } } }
-[2018-12-24T15:13:53.843Z] INFO on 222 | { a: { a: { a: { a: { a: { a: null } } } } } }
-[2018-12-24T15:13:53.844Z] INFO on 222 | { a: { a: { a: { a: { a: { a: 1 } } } } } }
-[2018-12-24T15:13:53.844Z] INFO on 222 | { a: { a: { a: { a: { a: { a: '1' } } } } } }
-[2018-12-24T15:13:53.844Z] INFO on 222 | { a: { a: { a: { a: { a: { a: 2018-12-24T15:13:53.844Z } } } } } }
-[2018-12-24T15:13:53.847Z] INFO on 222 | {
-[2018-12-24T15:13:53.847Z] INFO on 222 |   a: 
-[2018-12-24T15:13:53.847Z] INFO on 222 |    { a: 
-[2018-12-24T15:13:53.847Z] INFO on 222 |       { a: 
-[2018-12-24T15:13:53.847Z] INFO on 222 |          { a: 
-[2018-12-24T15:13:53.847Z] INFO on 222 |             { a: 
-[2018-12-24T15:13:53.847Z] INFO on 222 |                { a: Error
-[2018-12-24T15:13:53.847Z] INFO on 222 |     at startTest (/home/krot47/repos/logger/tests/tests/test-2.js:46:48)
-[2018-12-24T15:13:53.847Z] INFO on 222 |     at Object.<anonymous> (/home/krot47/repos/logger/tests/test.js:47:5)
-[2018-12-24T15:13:53.847Z] INFO on 222 |     at Module._compile (module.js:635:30)
-[2018-12-24T15:13:53.847Z] INFO on 222 |     at loader (/home/krot47/repos/logger/node_modules/babel-register/lib/node.js:144:5)
-[2018-12-24T15:13:53.847Z] INFO on 222 |     at Object.require.extensions.(anonymous function) [as .js] (/home/krot47/repos/logger/node_modules/babel-register/lib/node.js:154:7)
-[2018-12-24T15:13:53.847Z] INFO on 222 |     at Module.load (module.js:554:32)
-[2018-12-24T15:13:53.847Z] INFO on 222 |     at tryModuleLoad (module.js:497:12)
-[2018-12-24T15:13:53.847Z] INFO on 222 |     at Function.Module._load (module.js:489:3)
-[2018-12-24T15:13:53.847Z] INFO on 222 |     at Function.Module.runMain (module.js:676:10)
-[2018-12-24T15:13:53.847Z] INFO on 222 |     at Object.<anonymous> (/home/krot47/repos/logger/node_modules/babel-cli/lib/_babel-node.js:154:22) } } } } } }
-[2018-12-24T15:13:53.848Z] INFO on 222 | [ 1, [ 1, [ 1, [ 1, [ 1, [ 1, [Array] ] ] ] ] ] ]
-[2018-12-24T15:13:53.848Z] INFO on 222 | { a: { a: { a: { a: { a: /a/ } } } } }
-[2018-12-24T15:13:53.848Z] INFO on 222 | { a: { a: { a: { a: { a: Symbol(asd) } } } } }
-[2018-12-24T15:13:53.849Z] INFO on 222 | { a: { a: { a: { a: { a: Promise { 'asd' } } } } } }
+[2018-12-25T13:16:22.197Z] INFO on 222 | { x: 1, a: [Circular] }
+[2018-12-25T13:16:22.198Z] INFO on 222 | { a: { a: { a: { a: { a: { a: [Object] } } } } } }
+[2018-12-25T13:16:22.198Z] INFO on 222 | { a: { a: { a: { a: { a: { a: [Array] } } } } } }
+[2018-12-25T13:16:22.198Z] INFO on 222 | { a: { a: { a: { a: { a: { a: [Function: a] } } } } } }
+[2018-12-25T13:16:22.199Z] INFO on 222 | { a: { a: { a: { a: { a: { a: NaN } } } } } }
+[2018-12-25T13:16:22.199Z] INFO on 222 | { a: { a: { a: { a: { a: { a: undefined } } } } } }
+[2018-12-25T13:16:22.199Z] INFO on 222 | { a: { a: { a: { a: { a: { a: null } } } } } }
+[2018-12-25T13:16:22.199Z] INFO on 222 | { a: { a: { a: { a: { a: { a: 1 } } } } } }
+[2018-12-25T13:16:22.199Z] INFO on 222 | { a: { a: { a: { a: { a: { a: '1' } } } } } }
+[2018-12-25T13:16:22.199Z] INFO on 222 | { a: { a: { a: { a: { a: { a: 2018-12-25T13:16:22.199Z } } } } } }
+[2018-12-25T13:16:22.202Z] INFO on 222 | {
+[2018-12-25T13:16:22.202Z] INFO on 222 |   a: 
+[2018-12-25T13:16:22.202Z] INFO on 222 |    { a: 
+[2018-12-25T13:16:22.202Z] INFO on 222 |       { a: 
+[2018-12-25T13:16:22.202Z] INFO on 222 |          { a: 
+[2018-12-25T13:16:22.202Z] INFO on 222 |             { a: 
+[2018-12-25T13:16:22.202Z] INFO on 222 |                { a: Error
+[2018-12-25T13:16:22.202Z] INFO on 222 |     at startTest (/home/krot47/repos/logger/tests/tests/test-2.js:46:48)
+[2018-12-25T13:16:22.202Z] INFO on 222 |     at Object.<anonymous> (/home/krot47/repos/logger/tests/test.js:47:5)
+[2018-12-25T13:16:22.202Z] INFO on 222 |     at Module._compile (module.js:635:30)
+[2018-12-25T13:16:22.202Z] INFO on 222 |     at loader (/home/krot47/repos/logger/node_modules/babel-register/lib/node.js:144:5)
+[2018-12-25T13:16:22.202Z] INFO on 222 |     at Object.require.extensions.(anonymous function) [as .js] (/home/krot47/repos/logger/node_modules/babel-register/lib/node.js:154:7)
+[2018-12-25T13:16:22.202Z] INFO on 222 |     at Module.load (module.js:554:32)
+[2018-12-25T13:16:22.202Z] INFO on 222 |     at tryModuleLoad (module.js:497:12)
+[2018-12-25T13:16:22.202Z] INFO on 222 |     at Function.Module._load (module.js:489:3)
+[2018-12-25T13:16:22.202Z] INFO on 222 |     at Function.Module.runMain (module.js:676:10)
+[2018-12-25T13:16:22.202Z] INFO on 222 |     at Object.<anonymous> (/home/krot47/repos/logger/node_modules/babel-cli/lib/_babel-node.js:154:22) } } } } } }
+[2018-12-25T13:16:22.203Z] INFO on 222 | [ 1, [ 1, [ 1, [ 1, [ 1, [ 1, [Array] ] ] ] ] ] ]
+[2018-12-25T13:16:22.203Z] INFO on 222 | { a: { a: { a: { a: { a: /a/ } } } } }
+[2018-12-25T13:16:22.203Z] INFO on 222 | { a: { a: { a: { a: { a: Symbol(asd) } } } } }
+[2018-12-25T13:16:22.204Z] INFO on 222 | { a: { a: { a: { a: { a: Promise { 'asd' } } } } } }

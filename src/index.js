@@ -29,11 +29,11 @@ export type LoggerConfigType = {
     stdoutMsgSeparator?: ?string | false,
     stdout?: ?Transport<*> | Logger | false,
     transports?: Array<Transport<any>>,
-    printConfig?: {
+    printConfig?: $Shape<{
         colors: boolean,
         depth: number,
         maxArrayLength: number,
-    },
+    }>,
 };
 
 
