@@ -26,7 +26,7 @@ import {
 const testsDir = `${ __dirname }/tests`;
 
 const RegExps = {
-    dates: /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/g,
+    dates: /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/g,
 };
 
 

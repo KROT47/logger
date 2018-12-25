@@ -1,6 +1,6 @@
 {
     "name": "@bubblehunt/logger",
-    "version": "1.3.3",
+    "version": "1.3.4",
     "description": "Helper for writing logs using transports",
     "author": "krot47 <lelekodmitry@gmail.com>",
     "repository": {

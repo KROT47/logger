@@ -34,6 +34,7 @@ export type LoggerConfigType = {
         depth: number,
         maxArrayLength: number,
     }>,
+    jsonStringifyArgs: Array<any>,
 };
 
 
@@ -56,6 +57,7 @@ const DefaultConfig = {
         depth: 5,
         maxArrayLength: 30,
     },
+    jsonStringifyArgs: [],
 };
 
 const RegExps = {
@@ -275,7 +277,7 @@ export class Logger {
 
         const msgs = this._prettyPrintAll( printType, options, args );
 
-        const { hostname } = this._config;
+        const { hostname, jsonStringifyArgs } = this._config;
 
         const { level } = options;
 
@@ -283,7 +285,10 @@ export class Logger {
 
         switch ( printType ) {
             case 'json':
-                return JSON.stringify({ ts, level, hostname, msgs });
+                return JSON.stringify(
+                    { ts, level, hostname, msgs },
+                    ...jsonStringifyArgs
+                );
 
             case 'simple-cli':
                 const { stdoutMsgSeparator } = this._config;

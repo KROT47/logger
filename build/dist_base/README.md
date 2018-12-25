@@ -15,7 +15,7 @@ simpleLogger.info( 'Writes to stdout', 1, { a: [ 123 ] } );
 // --------------------------------------------------------
 import FileTransport from '@bubblehunt/logger/transports/FileTransport';
 
-const logPath = 'out';
+const logPath = __dirname + 'out';
 
 const logger = new Logger({
     // Minimal level which would be printed.
@@ -36,9 +36,11 @@ const logger = new Logger({
     // Every message will be written to transport if level matches
     transports: [
         new FileTransport({
+            level: 'trace',
             // If not strict then all upper levels will also be printed
             strict: false,
-            level: 'trace',
+            // here we explicitly set print type
+            printType: 'json',
             // File will be created right away even if no data was written
             createOnFirstWrite: false,
             filePath: `${ logPath }/0_all.json`,
@@ -76,6 +78,8 @@ const logger = new Logger({
         // First elements quantity to print
         maxArrayLength: 30,
     },
+    // arguments to JSON.stringify if printType: 'json'
+    jsonStringifyArgs: [],
 });
 
 logger.info( 'writes to first transport, with level "info" and to stdout' );
