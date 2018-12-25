@@ -88,11 +88,17 @@ export class Logger {
         if ( this._config.stdout ) {
             if ( this._config.stdout instanceof Logger ) {
                 this.stdout = this._config.stdout;
-            } else {
+
+            } else if ( this._config.stdout instanceof Transport ) {
                 stdoutConfig = {
                     level: this._config.stdoutLevel,
-                    stdout: this._config.stdout,
+                    stdout: false,
+                    transports: [
+                        this._config.stdout,
+                    ]
                 };
+            } else {
+                throw Error( 'Wrong stdout' );
             }
 
         } else if ( this._config.stdout === undefined ) {

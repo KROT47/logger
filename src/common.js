@@ -32,7 +32,7 @@ export type HandlerType =
 export type EndType = () => void;
 
 export type TransportConfigType<SpecificFieldsType> = {|
-    level: LevelType,
+    level?: LevelType,
     handler?: HandlerType,
     printType?: PrintType,
     // if true then msg will be printed only if level is equal to transport's

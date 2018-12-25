@@ -5,6 +5,7 @@
 // =============================================================================
 import { Logger } from '../dist';
 import { FileTransport } from '../dist/transports/FileTransport';
+import { StdoutTransport } from '../dist/transports/StdoutTransport';
 
 
 // =============================================================================
@@ -13,6 +14,7 @@ import { FileTransport } from '../dist/transports/FileTransport';
 export {
     Logger,
     FileTransport,
+    StdoutTransport,
 };
 
 
