@@ -106,7 +106,16 @@ export class Logger {
                 ]
             };
         }
-        if ( stdoutConfig ) this.stdout = new Logger( stdoutConfig );
+        if ( stdoutConfig ) {
+            this.stdout =
+                new Logger(
+                    _.merge(
+                        {},
+                        _.omit( this._config, [ 'transports', 'stdout' ] ),
+                        stdoutConfig
+                    )
+                );
+        }
 
         this._transports =
             this._config.transports
@@ -317,6 +326,11 @@ export class Logger {
 
         const { depth } = this._config.printConfig;
 
+        const printConfig = {
+            ...this._config.printConfig,
+            colors: useColors,
+        };
+
         const type = GetType( msg );
 
         switch ( type ) {
@@ -329,7 +343,7 @@ export class Logger {
                 if ( isJsonType ) return msg;
 
                 return (
-                    this._stringify( msg, { colors: useColors } )
+                    this._stringify( msg, printConfig )
                         .replace( RegExps.escapedLineBreaks, '\n' )
                 );
 
@@ -338,7 +352,7 @@ export class Logger {
                 if ( currDepth > depth ) return `[${ type }]`;
 
                 if ( !isJsonType ) {
-                    return this._stringify( msg, { colors: useColors } );
+                    return this._stringify( msg, printConfig );
                 }
 
                 const nextDepth = currDepth + 1;
@@ -371,7 +385,7 @@ export class Logger {
                 return msg;
 
             case 'Promise':
-                return `[${ this._stringify( msg, { colors: useColors } ) }]`;
+                return `[${ this._stringify( msg, printConfig ) }]`;
 
             default: return `[${ msg.toString() }]`;
         }
