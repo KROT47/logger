@@ -160,6 +160,9 @@ export class Logger {
     log( level: LevelType, ...msgs: Array<any> ) {
         const levelValue = getLevelValue( level );
 
+        // check with logger level
+        if ( this._levelValue > levelValue ) return;
+
         const logParams = {
             msgs,
             printLogCache: {},
@@ -211,7 +214,6 @@ export class Logger {
             for ( var i = this._transports.length; i--; ) {
                 this._handleTransport({
                     transport: this._transports[ i ],
-                    globalLevelValue: this._levelValue,
                     ...params,
                 });
             }
@@ -222,24 +224,19 @@ export class Logger {
     }
 
     _handleTransport({
-        globalLevelValue,
         transport,
         printLogCache,
         options,
         msgs,
     }: {
         transport: Transport<*>,
-        globalLevelValue: number,
         printLogCache: Object,
         options: OptionsType,
         msgs: Array<any>,
     }) {
         const { levelValue } = options;
 
-        // check global level
-        if ( globalLevelValue > levelValue ) return;
-
-        // chack transport level
+        // check transport level
         if ( !transport._levelIsOkToPrint( levelValue ) ) return;
 
         const outStr =
