@@ -11,7 +11,7 @@ import { Logger, FileTransport } from '../common';
 // =============================================================================
 export function startTest( outputDirPath: string ) {
     const logger = new Logger({
-        hostname: '777777',
+        hostname: '07',
         level: 'trace',
         stdoutLevel: 'trace',
         transports: [

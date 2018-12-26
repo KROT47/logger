@@ -3,7 +3,7 @@
 // =============================================================================
 // Imports
 // =============================================================================
-import { Logger } from '../common';
+import { Logger, StdoutTransport, FileTransport } from '../common';
 
 
 // =============================================================================
@@ -11,14 +11,26 @@ import { Logger } from '../common';
 // =============================================================================
 export function startTest( outputDirPath: string ) {
     const logger = new Logger({
-        stdoutLevel: 'info',
+        hostname: '09',
+        level: 'trace',
+        stdoutLevel: 'trace',
+        stdout: new StdoutTransport({
+            printType: 'json',
+        }),
+        jsonStringifyArgs: [ null, 2 ]
     });
 
-    const logger2 = logger.child({
-        hostname: '55555',
+    logger.info({
+        a: {
+            a: {
+                a: {
+                    a: {
+                        a: 'Should be pretty printed'
+                    }
+                }
+            }
+        }
     });
-
-    logger2.stdout.info( 'This line will be printed only to stdout' );
 }
 
 export default startTest;

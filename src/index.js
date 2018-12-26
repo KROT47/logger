@@ -34,7 +34,7 @@ export type LoggerConfigType = {
         depth: number,
         maxArrayLength: number,
     }>,
-    jsonStringifyArgs: Array<any>,
+    jsonStringifyArgs?: Array<any>,
 };
 
 
@@ -85,6 +85,8 @@ export class Logger {
         this._levelValue = getLevelValue( this._config.level );
         this._stdoutLevelValue = getLevelValue( this._config.stdoutLevel );
 
+        const { transports } = this._config;
+
         var stdoutConfig;
 
         if ( this._config.stdout ) {
@@ -126,18 +128,22 @@ export class Logger {
         }
 
         this._transports =
-            this._config.transports
+            transports
                 .filter(
                     transport => transport._canBeHandled( this._levelValue )
                 );
     }
 
     child( childConfig: LoggerConfigType ) {
-        const stdout =
+        var { stdout } = childConfig;
+
+        if ( stdout === undefined ) {
+            stdout =
                 this.stdout
                 && this.stdout.child(
-                    _.omit( childConfig, [ 'transports', 'stdout' ] )
+                    _.omit( childConfig, [ 'transports' ] )
                 );
+        }
 
         const config =
                 _.mergeWith(
@@ -285,6 +291,12 @@ export class Logger {
 
         switch ( printType ) {
             case 'json':
+                return JSON.stringify(
+                    { ts, level, hostname, msgs },
+                    ...jsonStringifyArgs
+                );
+
+            case 'simple-json':
                 return JSON.stringify(
                     { ts, level, hostname, msgs },
                     ...jsonStringifyArgs

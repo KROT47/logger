@@ -3,7 +3,7 @@
 // =============================================================================
 // Imports
 // =============================================================================
-import { Logger, StdoutTransport, FileTransport } from '../common';
+import { Logger } from '../common';
 
 
 // =============================================================================
@@ -11,15 +11,17 @@ import { Logger, StdoutTransport, FileTransport } from '../common';
 // =============================================================================
 export function startTest( outputDirPath: string ) {
     const logger = new Logger({
-        hostname: '88888',
-        level: 'trace',
         stdoutLevel: 'trace',
-        stdout: new StdoutTransport({
-            printType: 'json',
-        }),
+        level: 'info',
     });
 
-    logger.info( 'This line should be in json format' );
+    const logger2 = logger.child({
+        hostname: '04',
+    });
+
+    logger2.info( 'Next line should be result of 1 + 1' );
+
+    logger2.trace( 1 + 1, 'OK!' );
 }
 
 export default startTest;

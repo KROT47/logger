@@ -15,7 +15,7 @@ export function startTest( outputDirPath: string ) {
     });
 
     const logger2 = logger.child({
-        hostname: '222',
+        hostname: '02',
         transports: [
             new FileTransport({
                 level: 'info',

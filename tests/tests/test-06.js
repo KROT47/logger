@@ -11,11 +11,12 @@ import { Logger, FileTransport } from '../common';
 // =============================================================================
 export function startTest( outputDirPath: string ) {
     const logger = new Logger({
-        level: 'info',
+        level: 'state',
+        stdoutLevel: 'state',
     });
 
     const logger2 = logger.child({
-        hostname: '333',
+        hostname: '06',
         transports: [
             new FileTransport({
                 level: 'trace',
@@ -26,12 +27,19 @@ export function startTest( outputDirPath: string ) {
         ]
     });
 
-    const a: Object = { x: 1 };
-    a.a = a;
+    logger2.error( 'This must not be printed' );
 
-    logger2.info( a );
+    logger2.state( 'Something important' );
 
-    logger2.debug( a );
+
+    const logger3 = logger2.child({
+        hostname: '06-2',
+        level: 'none',
+        stdoutLevel: 'none',
+        stopOnFatal: false,
+    });
+
+    logger3.fatal( 'This must not be printed' );
 }
 
 export default startTest;
