@@ -10,7 +10,13 @@ import _ from 'lodash';
 // json - basically to print to file
 // simple-cli - uses cli colors, so printing to file will be not pretty
 // simple - prints without colors as simple text
-export type PrintType = 'json' | 'simple-json' | 'simple-cli' | 'simple';
+export type PrintType =
+        | 'json'
+        | 'simple-cli'
+        | 'simple-json'
+        | 'simple-json-cli'
+        | 'simple';
+
 export type LevelType =
         | 'trace'
         | 'debug'

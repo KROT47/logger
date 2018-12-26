@@ -59,7 +59,7 @@ setTimeout( () => {
         console.log( 'DONE! No errors.');
     }
 
-}, 100 );
+}, 400 );
 
 
 var errorsCount = 0;
@@ -96,7 +96,7 @@ function checkTestResults() {
 
     assert(
         expectedTestsCount === outputTestsCount,
-        `Error: tests count mismatch: ${ outputTestsCount } vs ${ expectedTestsCount } expected`
+        `tests count mismatch: ${ outputTestsCount } vs ${ expectedTestsCount } expected`
     );
 
     return errorsCount;
@@ -108,9 +108,12 @@ function assert( cond, errMsg ) {
     if ( !cond ) {
         console.log( 'Error:', errMsg );
         errorsCount++;
-    } else {
-        console.log( 'OK!' );
+        return false;
     }
+
+    console.log( 'OK!' );
+
+    return true;
 }
 
 function filesAreEqual( filePath1, filePath2 ) {

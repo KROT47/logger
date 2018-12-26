@@ -278,7 +278,7 @@ export class Logger {
     ) {
         const ts = new Date().toISOString();
 
-        const msgs = this._prettyPrintAll( printType, options, args );
+        var msgs = this._prettyPrintAll( printType, options, args );
 
         const { hostname, jsonStringifyArgs } = this._config;
 
@@ -293,17 +293,13 @@ export class Logger {
                     ...jsonStringifyArgs
                 );
 
-            case 'simple-json':
-                return JSON.stringify(
-                    { ts, level, hostname, msgs },
-                    ...jsonStringifyArgs
-                );
-
             case 'simple-cli':
+            case 'simple-json-cli':
                 const { stdoutMsgSeparator } = this._config;
 
                 if ( stdoutMsgSeparator ) separator = stdoutMsgSeparator;
 
+            case 'simple-json':
             case 'simple':
                 const levelStr = LevelsByName[ level ].printValue;
 
@@ -339,6 +335,12 @@ export class Logger {
         msg: any,
         currDepth?: number = 0
     ) {
+        const { jsonStringifyArgs } = this._config;
+
+        if ( ~printType.indexOf( 'simple-json' ) ) {
+            return JSON.stringify( msg, ...jsonStringifyArgs );
+        }
+
         const isJsonType = printType === 'json';
         const useColors = printType === 'simple-cli';
 
