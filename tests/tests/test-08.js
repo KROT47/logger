@@ -20,6 +20,22 @@ export function startTest( outputDirPath: string ) {
     });
 
     logger.info( 'This line should be in json format' );
+
+    const logger2 = logger.child({
+        jsonStringifyArgs: [ null, 2 ]
+    });
+
+    logger2.info({
+        a: {
+            a: {
+                a: {
+                    a: {
+                        a: 'Pretty printed JSON'
+                    }
+                }
+            }
+        }
+    });
 }
 
 export default startTest;

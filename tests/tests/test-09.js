@@ -11,11 +11,9 @@ import { Logger, StdoutTransport, FileTransport } from '../common';
 // =============================================================================
 export function startTest( outputDirPath: string ) {
     const logger = new Logger({
-        hostname: '09',
-        level: 'trace',
-        stdoutLevel: 'trace',
+        hostname: '10',
         stdout: new StdoutTransport({
-            printType: 'json',
+            printType: 'simple-json-cli',
         }),
         jsonStringifyArgs: [ null, 2 ]
     });
@@ -43,7 +41,7 @@ export function startTest( outputDirPath: string ) {
         }
     };
 
-    // logger.info( 'Pretty printed:', complexObj );
+    logger.info( 'Pretty printed:', complexObj );
 
     const logger2 = logger.child({
         stdout: new StdoutTransport({
