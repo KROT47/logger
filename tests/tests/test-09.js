@@ -50,7 +50,9 @@ export function startTest( outputDirPath: string ) {
         jsonStringifyArgs: []
     });
 
-    logger2.info( 'Compact JSON object:', complexObj );
+    const { info } = logger2;
+
+    info( 'Compact JSON object:', complexObj );
 }
 
 export default startTest;

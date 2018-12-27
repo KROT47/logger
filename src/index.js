@@ -142,6 +142,14 @@ export class Logger {
                 .filter(
                     transport => transport._canBeHandled( this._levelValue )
                 );
+
+        for ( const levelName in LevelsByName ) {
+            // $FlowFixMe
+            if ( typeof this[ levelName ] === 'function' ) {
+                // $FlowFixMe
+                this[ levelName ] = this[ levelName ].bind( this );
+            }
+        }
     }
 
     child( childConfig: LoggerConfigType ) {
