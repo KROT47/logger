@@ -37,6 +37,8 @@ export type LoggerConfigType = {
     jsonStringifyArgs?: Array<any>,
 };
 
+export type LogMethodType = ( ...args: Array<any> ) => Logger;
+
 
 // =============================================================================
 // Constants
@@ -78,6 +80,14 @@ export class Logger {
     _transports: Array<Transport<*>>;
 
     stdout: Logger;
+
+    trace: LogMethodType;
+    debug: LogMethodType;
+    info: LogMethodType;
+    warn: LogMethodType;
+    error: LogMethodType;
+    state: LogMethodType;
+    fatal: LogMethodType;
 
     constructor( config?: LoggerConfigType ) {
         this._config = _.merge( {}, DefaultConfig, config );
@@ -140,59 +150,58 @@ export class Logger {
         if ( stdout === undefined ) {
             stdout =
                 this.stdout
-                && this.stdout.child(
-                    _.omit( childConfig, [ 'transports' ] )
-                );
+                && this.stdout.child( _.omit( childConfig, 'transports' ) );
         }
 
         const config =
                 _.mergeWith(
                     {}, this._config, { stdout }, childConfig,
-                    this._childCustomizer
+                    configMergeCustomizer
                 );
 
         return new Logger( config );
     }
-    _childCustomizer( objValue: any, srcValue: any ) {
-        if ( _.isArray( objValue ) ) return objValue.concat( srcValue );
-    }
 
-    log( level: LevelType, ...msgs: Array<any> ) {
+    log( level: LevelType, ...msgs: Array<any> ): Logger {
         const levelValue = getLevelValue( level );
 
         // check with logger level
-        if ( this._levelValue > levelValue ) return;
+        if ( this._levelValue <= levelValue ) {
+            const logParams = {
+                msgs,
+                printLogCache: {},
+                options: {
+                    level,
+                    levelValue,
+                },
+            };
 
-        const logParams = {
-            msgs,
-            printLogCache: {},
-            options: {
-                level,
-                levelValue,
-            },
-        };
+            this.stdout && this.stdout._log( logParams );
 
-        this.stdout && this.stdout._log( logParams );
+            this._log( logParams );
+        }
 
-        this._log( logParams );
+        return this;
     }
 
-    trace( ...args: Array<any> ) { this.log( 'trace', ...args ) }
+    trace() { return this.log( 'trace', ...arguments ) }
 
-    debug( ...args: Array<any> ) { this.log( 'debug', ...args ) }
+    debug() { return this.log( 'debug', ...arguments ) }
 
-    info( ...args: Array<any> ) { this.log( 'info', ...args ) }
+    info() { return this.log( 'info', ...arguments ) }
 
-    warn( ...args: Array<any> ) { this.log( 'warn', ...args ) }
+    warn() { return this.log( 'warn', ...arguments ) }
 
-    error( ...args: Array<any> ) { this.log( 'error', ...args ) }
+    error() { return this.log( 'error', ...arguments ) }
 
-    state( ...args: Array<any> ) { this.log( 'state', ...args ) }
+    state() { return this.log( 'state', ...arguments ) }
 
-    fatal( ...args: Array<any> ) {
-        this.log( 'fatal', ...args );
+    fatal() {
+        const result = this.log( 'fatal', ...arguments );
 
         if ( this._config.stopOnFatal ) process.exit( 1 );
+
+        return result;
     }
 
     end() {
@@ -384,7 +393,7 @@ export class Logger {
                 );
 
                 const result =
-                        Array.isArray( msg )
+                        _.isArray( msg )
                             ? _.map( msg, prettyPrint )
                             : _.mapValues( msg, prettyPrint );
 
@@ -433,3 +442,23 @@ export class Logger {
 }
 
 export default Logger;
+
+
+
+// =============================================================================
+// Helpers
+// =============================================================================
+const ConfigMergeHandlers = {
+    transports: ( objValue, srcValue ) => (
+        _.isArray( objValue ) ? objValue.concat( srcValue ) : undefined
+    ),
+    jsonStringifyArgs: ( objValue, srcValue ) => (
+        _.isArray( objValue ) ? srcValue : undefined
+    ),
+};
+
+function configMergeCustomizer( objValue: any, srcValue: any, key: string ) {
+    const handler = ConfigMergeHandlers[ key ];
+
+    if ( handler ) return handler( ...arguments );
+}
