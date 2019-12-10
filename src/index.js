@@ -167,7 +167,7 @@ export class Logger {
                     configMergeCustomizer
                 );
 
-        return new Logger( config );
+        return new this.constructor( config );
     }
 
     log( level: LevelType, ...msgs: Array<any> ): Logger {
