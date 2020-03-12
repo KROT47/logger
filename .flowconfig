@@ -28,6 +28,8 @@ include_warnings=true
 suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe
 # same but to define flow issue
 suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
+# When all is good
+suppress_comment=\\(.\\|\n\\)*\\$FlowOk
 # for testing purposes
 suppress_comment=\\(.\\|\n\\)*\\$FlowThrowsError
 

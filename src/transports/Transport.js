@@ -27,6 +27,7 @@ export type {
 // Constants
 // =============================================================================
 const DefaultConfig = {
+    level: 'info',
     strict: true,
     printType: 'simple',
 };
@@ -45,7 +46,9 @@ export
         _end: EndType;
 
         constructor( config?: ConfigType ) {
-            this._config = { ...DefaultConfig, ...config };
+            this._config =
+                // $FlowOk
+                { ...DefaultConfig, ...config };
 
             this.levelValue = getLevelValue( this._config.level );
         }
@@ -54,18 +57,20 @@ export
 
         // Public
         // --------------------------------------------------------
-        handler: HandlerType = ( logStr, options ) => {
-            const { handler = EmptyFunc } = this._config;
-
-            handler( logStr, options );
-        };
+        handler: HandlerType = ( logStr, options ) => {};
 
         end = EmptyFunc;
 
         // Protected
         // --------------------------------------------------------
         _handler: HandlerType = ( logStr, options ) => {
-            this.handler( logStr, options );
+            const { handler } = this._config;
+
+            if ( handler ) {
+                handler( logStr, options, this.handler );
+            } else {
+                this.handler( logStr, options );
+            }
         }
 
         _end = () => this.end();

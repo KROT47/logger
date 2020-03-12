@@ -2,6 +2,9 @@
 
 [NPM Package](https://www.npmjs.com/package/@bubblehunt/logger)
 
+## API
+
+See tests
 
 ## Dev Commands
 

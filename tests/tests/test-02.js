@@ -3,7 +3,7 @@
 // =============================================================================
 // Imports
 // =============================================================================
-import { Logger, FileTransport } from '../common';
+import { Logger, FileTransport, DefaultTestLoggerConfig } from '../common';
 
 
 // =============================================================================
@@ -15,6 +15,7 @@ export function startTest( outputDirPath: string ) {
     });
 
     const logger2 = logger.child({
+        ...DefaultTestLoggerConfig,
         hostname: '02',
         transports: [
             new FileTransport({
@@ -29,7 +30,7 @@ export function startTest( outputDirPath: string ) {
         ]
     });
 
-    const a: Object = { x: 1 };
+    const a: Object = { x: 1, _circular: true };
     a.a = a;
 
     logger2.info( a );
@@ -43,11 +44,11 @@ export function startTest( outputDirPath: string ) {
     logger2.info({ a: { a: { a: { a: { a: { a: 1 } } } } } });
     logger2.info({ a: { a: { a: { a: { a: { a: '1' } } } } } });
     logger2.info({ a: { a: { a: { a: { a: { a: new Date } } } } } });
-    logger2.info({ a: { a: { a: { a: { a: { a: new Error } } } } } });
+    logger2.info({ a: { a: { a: { a: { a: { a: new Error( 'AAA' ) } } } } } });
     logger2.info([ 1, [ 1, [ 1, [ 1, [ 1, [ 1, [ 1, [ 1 ] ] ] ] ] ] ] ]);
-    logger2.info({ a: { a: { a: { a: { a: new RegExp('a') } } } } });
-    logger2.info({ a: { a: { a: { a: { a: Symbol('asd') } } } } });
-    logger2.info({ a: { a: { a: { a: { a: Promise.resolve('asd') } } } } });
+    logger2.info({ a: { a: { a: { a: { a: new RegExp( 'a' ) } } } } });
+    logger2.info({ a: { a: { a: { a: { a: Symbol( 'asd' ) } } } } });
+    logger2.info({ a: { a: { a: { a: { a: Promise.resolve( 'asd' ) } } } } });
 }
 
 export default startTest;

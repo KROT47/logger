@@ -3,7 +3,12 @@
 // =============================================================================
 // Imports
 // =============================================================================
-import { Logger, StdoutTransport, FileTransport } from '../common';
+import {
+    Logger,
+    StdoutTransport,
+    FileTransport,
+    DefaultTestLoggerConfig,
+} from '../common';
 
 
 // =============================================================================
@@ -11,6 +16,7 @@ import { Logger, StdoutTransport, FileTransport } from '../common';
 // =============================================================================
 export function startTest( outputDirPath: string ) {
     const logger = new Logger({
+        ...DefaultTestLoggerConfig,
         hostname: '10',
         stdout: new StdoutTransport({
             printType: 'simple-json-cli',

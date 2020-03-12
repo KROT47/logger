@@ -3,7 +3,7 @@
 // =============================================================================
 // Imports
 // =============================================================================
-import { Logger } from '../common';
+import { Logger, DefaultTestLoggerConfig } from '../common';
 
 
 // =============================================================================
@@ -11,6 +11,7 @@ import { Logger } from '../common';
 // =============================================================================
 export function startTest( outputDirPath: string ) {
     const logger = new Logger({
+        ...DefaultTestLoggerConfig,
         stdoutLevel: 'trace',
         level: 'info',
     });

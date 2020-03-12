@@ -1,1 +1,1 @@
-[2018-12-26T20:14:27.975Z] INFO on 03 | { x: 1, a: [Circular] }
+[2020-03-12T22:07:43.656Z] INFO on 03 | { x: 1, _circular: true, a: [Circular] }

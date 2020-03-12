@@ -3,7 +3,7 @@
 // =============================================================================
 // Imports
 // =============================================================================
-import { Logger, FileTransport } from '../common';
+import { Logger, FileTransport, DefaultTestLoggerConfig } from '../common';
 
 
 // =============================================================================
@@ -15,6 +15,7 @@ export function startTest( outputDirPath: string ) {
     });
 
     const logger2 = logger.child({
+        ...DefaultTestLoggerConfig,
         hostname: '03',
         transports: [
             new FileTransport({
@@ -26,7 +27,7 @@ export function startTest( outputDirPath: string ) {
         ]
     });
 
-    const a: Object = { x: 1 };
+    const a: Object = { x: 1, _circular: true };
     a.a = a;
 
     logger2.info( a );

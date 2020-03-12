@@ -15,6 +15,10 @@ import StdoutTransport from './transports/StdoutTransport';
 import {
     getLevelValue,
     LevelsByName,
+    RegExps,
+    DefaultPrettyPrintHandlers,
+    type PrettyPrintHandlersType,
+    type PrintConfigType,
     type LevelType,
     type OptionsType,
     type PrintType,
@@ -22,22 +26,20 @@ import {
 
 // Flow types
 // --------------------------------------------------------
-export type LoggerConfigType = {
-    level?: LevelType,
-    stopOnFatal?: boolean,
-    hostname?: string,
-    stdoutMsgSeparator?: ?string | false,
-    stdout?: ?Transport<*> | Logger | false,
-    transports?: Array<Transport<any>>,
-    printConfig?: $Shape<{
-        colors: boolean,
-        depth: number,
-        maxArrayLength: number,
-    }>,
-    jsonStringifyArgs?: Array<any>,
-};
-
 export type LogMethodType = ( ...args: Array<any> ) => Logger;
+
+export type LoggerConfigType = {
+    level: LevelType,
+    stdoutLevel: LevelType,
+    stopOnFatal: boolean,
+    hostname: string,
+    stdoutMsgSeparator: ?string | false,
+    stdout: ?Transport<*> | Logger | false,
+    transports: Array<Transport<any>>,
+    printConfig: PrintConfigType,
+    jsonStringifyArgs: Array<any>,
+    prettyPrintHandlers: PrettyPrintHandlersType,
+};
 
 
 // =============================================================================
@@ -46,9 +48,9 @@ export type LogMethodType = ( ...args: Array<any> ) => Logger;
 const DefaultStdoutLevel = 'trace';
 const DefaultLevel = 'info';
 
-const DefaultConfig = {
-    stdoutLevel: DefaultStdoutLevel,
+const DefaultConfig: LoggerConfigType = {
     level: DefaultLevel,
+    stdoutLevel: DefaultStdoutLevel,
     stopOnFatal: false,
     hostname: 'Main',
     stdoutMsgSeparator: '----------------------',
@@ -60,20 +62,17 @@ const DefaultConfig = {
         maxArrayLength: 30,
     },
     jsonStringifyArgs: [],
+    prettyPrintHandlers: DefaultPrettyPrintHandlers,
 };
 
-const RegExps = {
-    lineBreaks: /\n/g,
-    escapedLineBreaks: /\\n/g,
-    startsWithOpenBracket: /^{\s+/,
-};
+
 
 
 // =============================================================================
 // Logger
 // =============================================================================
 export class Logger {
-    _config: typeof DefaultConfig;
+    _config: LoggerConfigType;
     _levelValue: number;
     _stdoutLevelValue: number;
     _printTypes: { [ printType: PrintType ]: any };
@@ -89,7 +88,7 @@ export class Logger {
     state: LogMethodType;
     fatal: LogMethodType;
 
-    constructor( config?: LoggerConfigType ) {
+    constructor( config?: $Shape<LoggerConfigType> ) {
         this._config = _.merge( {}, DefaultConfig, config );
 
         this._levelValue = getLevelValue( this._config.level );
@@ -152,7 +151,7 @@ export class Logger {
         }
     }
 
-    child( childConfig: LoggerConfigType ) {
+    child( childConfig: $Shape<LoggerConfigType> ) {
         var { stdout } = childConfig;
 
         if ( stdout === undefined ) {
@@ -173,8 +172,10 @@ export class Logger {
     log( level: LevelType, ...msgs: Array<any> ): Logger {
         const levelValue = getLevelValue( level );
 
-        // check with logger level
-        if ( this._levelValue <= levelValue ) {
+        const logToStdout = this.stdout && this._stdoutLevelValue <= levelValue;
+        const logToTransports = this._levelValue <= levelValue;
+
+        if ( logToStdout || logToTransports ) {
             const logParams = {
                 msgs,
                 printLogCache: {},
@@ -184,9 +185,9 @@ export class Logger {
                 },
             };
 
-            this.stdout && this.stdout._log( logParams );
+            if ( logToStdout ) this.stdout._log( logParams );
 
-            this._log( logParams );
+            if ( logToTransports ) this._log( logParams );
         }
 
         return this;
@@ -222,11 +223,11 @@ export class Logger {
 
     // Private
     // --------------------------------------------------------
-    _log( params: {
+    _log( params: {|
         msgs: Array<any>,
         printLogCache: Object,
         options: OptionsType,
-    }) {
+    |}) {
         try {
             for ( var i = this._transports.length; i--; ) {
                 this._handleTransport({
@@ -370,76 +371,36 @@ export class Logger {
             colors: useColors,
         };
 
-        const type = GetType( msg );
+        const msgType = GetType( msg );
 
-        switch ( type ) {
-            case 'Error':
-                msg = {
-                    message: msg.message,
-                    stack: msg.stack,
-                };
+        const prettyPrintHandler = this._config.prettyPrintHandlers[ msgType ];
 
-                if ( isJsonType ) return msg;
+        if ( !prettyPrintHandler ) return `[${ msg.toString() }]`;
 
-                return (
-                    this._stringify( msg, printConfig )
-                        .replace( RegExps.escapedLineBreaks, '\n' )
-                );
-
-            case 'Array':
-            case 'Object':
-                if ( currDepth > depth ) return `[${ type }]`;
-
-                if ( !isJsonType ) {
-                    return this._stringify( msg, printConfig );
-                }
-
-                const nextDepth = currDepth + 1;
-
-                const prettyPrint = value => (
-                    this._prettyPrint( printType, options, value, nextDepth )
-                );
-
-                const result =
-                        _.isArray( msg )
-                            ? _.map( msg, prettyPrint )
-                            : _.mapValues( msg, prettyPrint );
-
-                return (
-                    currDepth === 0 && !isJsonType
-                        ? JSON.stringify( result )
-                        : result
-                );
-
-            case 'Function':
-            case 'Undefined':
-                return `[${ type }]`;
-
-            case 'Number': return Number.isNaN( msg ) ? '[NaN]' : msg;
-
-            case 'Date': return msg.toISOString();
-
-            case 'String':
-            case 'Null':
-                return msg;
-
-            case 'Promise':
-                return `[${ this._stringify( msg, printConfig ) }]`;
-
-            default: return `[${ msg.toString() }]`;
-        }
+        return prettyPrintHandler({
+            msg,
+            msgType,
+            printType,
+            options,
+            currDepth,
+            depth,
+            isJsonType,
+            printConfig,
+            loggerInstance: this,
+            defaultHandler: DefaultPrettyPrintHandlers[ msgType ],
+        });
     }
 
     _stringify(
         value: Object,
         printConfig?: Object
     ) {
-        printConfig =
+        const finalPrintConfig: Object =
             printConfig
                 ? _.merge( {}, this._config.printConfig, printConfig )
                 : this._config.printConfig;
 
-        var result = Util.inspect( value, printConfig );
+        var result = Util.inspect( value, finalPrintConfig );
 
         if ( ~result.indexOf( '\n' ) ) {
             result = result.replace( RegExps.startsWithOpenBracket, '{\n  ' );

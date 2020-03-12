@@ -1,31 +1,15 @@
-[2018-12-26T20:14:27.953Z] INFO on 02 | { x: 1, a: [Circular] }
-[2018-12-26T20:14:27.953Z] INFO on 02 | { a: { a: { a: { a: { a: { a: [Object] } } } } } }
-[2018-12-26T20:14:27.954Z] INFO on 02 | { a: { a: { a: { a: { a: { a: [Array] } } } } } }
-[2018-12-26T20:14:27.954Z] INFO on 02 | { a: { a: { a: { a: { a: { a: [Function: a] } } } } } }
-[2018-12-26T20:14:27.954Z] INFO on 02 | { a: { a: { a: { a: { a: { a: NaN } } } } } }
-[2018-12-26T20:14:27.954Z] INFO on 02 | { a: { a: { a: { a: { a: { a: undefined } } } } } }
-[2018-12-26T20:14:27.955Z] INFO on 02 | { a: { a: { a: { a: { a: { a: null } } } } } }
-[2018-12-26T20:14:27.955Z] INFO on 02 | { a: { a: { a: { a: { a: { a: 1 } } } } } }
-[2018-12-26T20:14:27.955Z] INFO on 02 | { a: { a: { a: { a: { a: { a: '1' } } } } } }
-[2018-12-26T20:14:27.955Z] INFO on 02 | { a: { a: { a: { a: { a: { a: 2018-12-26T20:14:27.955Z } } } } } }
-[2018-12-26T20:14:27.958Z] INFO on 02 | {
-[2018-12-26T20:14:27.958Z] INFO on 02 |   a: 
-[2018-12-26T20:14:27.958Z] INFO on 02 |    { a: 
-[2018-12-26T20:14:27.958Z] INFO on 02 |       { a: 
-[2018-12-26T20:14:27.958Z] INFO on 02 |          { a: 
-[2018-12-26T20:14:27.958Z] INFO on 02 |             { a: 
-[2018-12-26T20:14:27.958Z] INFO on 02 |                { a: Error
-[2018-12-26T20:14:27.958Z] INFO on 02 |     at startTest (/home/krot47/repos/logger/tests/tests/test-02.js:46:48)
-[2018-12-26T20:14:27.958Z] INFO on 02 |     at Object.<anonymous> (/home/krot47/repos/logger/tests/test.js:47:5)
-[2018-12-26T20:14:27.958Z] INFO on 02 |     at Module._compile (module.js:635:30)
-[2018-12-26T20:14:27.958Z] INFO on 02 |     at loader (/home/krot47/repos/logger/node_modules/babel-register/lib/node.js:144:5)
-[2018-12-26T20:14:27.958Z] INFO on 02 |     at Object.require.extensions.(anonymous function) [as .js] (/home/krot47/repos/logger/node_modules/babel-register/lib/node.js:154:7)
-[2018-12-26T20:14:27.958Z] INFO on 02 |     at Module.load (module.js:554:32)
-[2018-12-26T20:14:27.958Z] INFO on 02 |     at tryModuleLoad (module.js:497:12)
-[2018-12-26T20:14:27.958Z] INFO on 02 |     at Function.Module._load (module.js:489:3)
-[2018-12-26T20:14:27.958Z] INFO on 02 |     at Function.Module.runMain (module.js:676:10)
-[2018-12-26T20:14:27.958Z] INFO on 02 |     at Object.<anonymous> (/home/krot47/repos/logger/node_modules/babel-cli/lib/_babel-node.js:154:22) } } } } } }
-[2018-12-26T20:14:27.959Z] INFO on 02 | [ 1, [ 1, [ 1, [ 1, [ 1, [ 1, [Array] ] ] ] ] ] ]
-[2018-12-26T20:14:27.959Z] INFO on 02 | { a: { a: { a: { a: { a: /a/ } } } } }
-[2018-12-26T20:14:27.959Z] INFO on 02 | { a: { a: { a: { a: { a: Symbol(asd) } } } } }
-[2018-12-26T20:14:27.960Z] INFO on 02 | { a: { a: { a: { a: { a: Promise { 'asd' } } } } } }
+[2020-03-12T22:07:43.644Z] INFO on 02 | { x: 1, _circular: true, a: [Circular] }
+[2020-03-12T22:07:43.645Z] INFO on 02 | { a: { a: { a: { a: { a: { a: '[Object]' } } } } } }
+[2020-03-12T22:07:43.646Z] INFO on 02 | { a: { a: { a: { a: { a: { a: '[Array]' } } } } } }
+[2020-03-12T22:07:43.646Z] INFO on 02 | { a: { a: { a: { a: { a: { a: [Function: a] } } } } } }
+[2020-03-12T22:07:43.647Z] INFO on 02 | { a: { a: { a: { a: { a: { a: NaN } } } } } }
+[2020-03-12T22:07:43.647Z] INFO on 02 | { a: { a: { a: { a: { a: { a: undefined } } } } } }
+[2020-03-12T22:07:43.647Z] INFO on 02 | { a: { a: { a: { a: { a: { a: null } } } } } }
+[2020-03-12T22:07:43.648Z] INFO on 02 | { a: { a: { a: { a: { a: { a: 1 } } } } } }
+[2020-03-12T22:07:43.648Z] INFO on 02 | { a: { a: { a: { a: { a: { a: '1' } } } } } }
+[2020-03-12T22:07:43.649Z] INFO on 02 | { a: { a: { a: { a: { a: { a: 1970-01-01T00:00:00.000Z } } } } } }
+[2020-03-12T22:07:43.650Z] INFO on 02 | { a: { a: { a: { a: { a: { a: [Error: AAA] } } } } } }
+[2020-03-12T22:07:43.651Z] INFO on 02 | [ 1, [ 1, [ 1, [ 1, [ 1, [ 1, '[Array]' ] ] ] ] ] ]
+[2020-03-12T22:07:43.651Z] INFO on 02 | { a: { a: { a: { a: { a: /a/ } } } } }
+[2020-03-12T22:07:43.652Z] INFO on 02 | { a: { a: { a: { a: { a: Symbol(asd) } } } } }
+[2020-03-12T22:07:43.653Z] INFO on 02 | { a: { a: { a: { a: { a: Promise { 'asd' } } } } } }

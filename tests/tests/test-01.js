@@ -3,7 +3,7 @@
 // =============================================================================
 // Imports
 // =============================================================================
-import { Logger, FileTransport } from '../common';
+import { Logger, FileTransport, DefaultTestLoggerConfig } from '../common';
 
 
 // =============================================================================
@@ -15,16 +15,17 @@ export function startTest( outputDirPath: string ) {
     });
 
     const logger2 = logger.child({
+        ...DefaultTestLoggerConfig,
         hostname: '01',
         transports: [
             new FileTransport({
                 level: 'error',
                 filePath: `${ outputDirPath }/error.json`,
             }),
-        ]
+        ],
     });
 
-    logger2.error( new Error('test') );
+    logger2.error( new Error( 'test' ) );
 }
 
 export default startTest;

@@ -13,12 +13,20 @@ import Path from 'path';
 /**
  * Returns all directories in path
  */
-export function GetFiles( dirPath: string ) {
+export function GetFiles(
+    dirPath: string,
+    filter?: ?( { dirPath: string, file: string } ) => boolean
+) {
     return (
         FSExtra.readdirSync( dirPath )
-            .filter( file => (
-                !FSExtra.lstatSync( Path.join( dirPath, file ) ).isDirectory()
-            ))
+            .filter( file => {
+                if ( filter ) return filter({ dirPath, file });
+
+                return (
+                    !FSExtra.lstatSync( Path.join( dirPath, file ) )
+                    .isDirectory()
+                );
+            })
     );
 }
 
