@@ -5,11 +5,18 @@
 // =============================================================================
 import _ from 'lodash';
 
+import { type LevelType } from './flowTypes';
 
 // =============================================================================
 // Constants
 // =============================================================================
-export const Levels = [
+type LevelConfigType = {
+    name: LevelType,
+    value: number,
+    printValue: string,
+};
+
+export const Levels: Array<LevelConfigType> = [
     { name: 'trace', value: 0, printValue: 'TRACE' },
     { name: 'debug', value: 1, printValue: 'DEBUG' },
     { name: 'info',  value: 2, printValue: 'INFO' },
@@ -26,5 +33,8 @@ export const RegExps = {
     startsWithOpenBracket: /^{\s+/,
 };
 
-export const LevelsByName = _.keyBy( Levels, 'name' );
-export const LevelsByValue = _.keyBy( Levels, 'value' );
+export const LevelsByName: { [ key: string ]: LevelConfigType } =
+    _.keyBy( Levels, 'name' );
+
+export const LevelsByValue: { [ key: number ]: LevelConfigType } =
+    _.keyBy( Levels, 'value' );

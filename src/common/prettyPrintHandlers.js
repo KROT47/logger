@@ -13,6 +13,8 @@ import {
     type PrettyPrintHandlerOptionsType,
 } from './flowTypes';
 
+type ReturnType = string | Array<string> | { [ key: string ]: string };
+
 
 // ArrayOrObjectPrettyPrint
 // --------------------------------------------------------
@@ -26,7 +28,7 @@ export function ArrayOrObjectPrettyPrint({
     isJsonType,
     printConfig,
     loggerInstance,
-}: PrettyPrintHandlerOptionsType ): string {
+}: PrettyPrintHandlerOptionsType ): ReturnType {
     if ( currDepth > depth ) return `[${ msgType }]`;
 
     if ( !isJsonType ) {

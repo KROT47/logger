@@ -426,7 +426,9 @@ const ConfigMergeHandlers = {
     ),
 };
 
-function configMergeCustomizer( objValue: any, srcValue: any, key: string ) {
+type CustomizerType = ( objValue: any, srcValue: any, key: string ) => ?any;
+
+const configMergeCustomizer: CustomizerType = ( objValue, srcValue, key ) => {
     const handler = ConfigMergeHandlers[ key ];
 
     if ( handler ) return handler( ...arguments );

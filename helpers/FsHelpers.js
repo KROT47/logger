@@ -3,7 +3,13 @@
 // =============================================================================
 // Imports
 // =============================================================================
-import FSExtra from 'fs-extra';
+import {
+    removeSync,
+} from 'fs-extra';
+import {
+    readdirSync,
+    lstatSync,
+} from 'fs';
 import Path from 'path';
 
 
@@ -16,16 +22,13 @@ import Path from 'path';
 export function GetFiles(
     dirPath: string,
     filter?: ?( { dirPath: string, file: string } ) => boolean
-) {
+): Array<string> {
     return (
-        FSExtra.readdirSync( dirPath )
+        readdirSync( dirPath )
             .filter( file => {
                 if ( filter ) return filter({ dirPath, file });
 
-                return (
-                    !FSExtra.lstatSync( Path.join( dirPath, file ) )
-                    .isDirectory()
-                );
+                return !lstatSync( Path.join( dirPath, file ) ).isDirectory();
             })
     );
 }
@@ -34,4 +37,4 @@ export function GetFiles(
 // =============================================================================
 // RemoveSync
 // =============================================================================
-export const RemoveSync = FSExtra.removeSync;
+export const RemoveSync = removeSync;

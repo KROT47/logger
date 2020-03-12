@@ -7,7 +7,7 @@
 // Imports
 // =============================================================================
 import _ from 'lodash';
-import FSExtra from 'fs-extra';
+import { removeSync, copySync } from 'fs-extra';
 import Path from 'path';
 import Mkdirp from 'mkdirp';
 import KlawSync from 'klaw-sync';
@@ -29,7 +29,7 @@ import {
 // =============================================================================
 const outputFilePaths = KlawSync( outputDirPath );
 
-FSExtra.removeSync( expectedResultsDirPath );
+removeSync( expectedResultsDirPath );
 
 for ( var i = outputFilePaths.length; i--; ) {
     const { path: outputFilePath, stats } = outputFilePaths[ i ];
@@ -43,5 +43,5 @@ for ( var i = outputFilePaths.length; i--; ) {
 
     Mkdirp.sync( expectedResultDirPath );
 
-    FSExtra.copyFileSync( outputFilePath, expectedResultFilePath );
+    copySync( outputFilePath, expectedResultFilePath );
 }
